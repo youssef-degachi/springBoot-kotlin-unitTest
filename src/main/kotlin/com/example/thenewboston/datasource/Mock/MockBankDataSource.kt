@@ -9,6 +9,12 @@ import org.springframework.stereotype.Repository
 class MockBankDataSource: BankDataSource {
 
     override fun getBanks(): Collection<Bank> {
-        TODO("Not yet implemented")
+        val banks = listOf(
+            Bank("abc",0.1,1),
+            Bank("1234",0.1,1),
+            Bank("5678",0.1,1)
+
+        )
+        return banks
     }
 }
