@@ -10,7 +10,7 @@ class MockBankDataSource: BankDataSource {
 
 
     val banks = listOf(
-        Bank("abc",0.1,1),
+        Bank("abcdef",0.1,1),
         Bank("1234",0.1,1),
         Bank("5678",0.1,1)
 
