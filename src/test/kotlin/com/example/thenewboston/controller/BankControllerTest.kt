@@ -27,4 +27,26 @@ class BankControllerTest {
                 jsonPath("$[0].accountNumber") { value("abcdef") }
             }
     }
+    
+    @Test
+    fun `should return the bank with the given account number` (){
+        //description 
+        /*  text  */
+        
+        // given
+        val accountNumber = 1234
+        
+        // when// then
+        mockMvc.get("/api/banks/$accountNumber")
+            .andDo { print() }
+            .andExpect {
+                status{ isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.trust"){value{1.2}}
+                jsonPath("$.transactionFee"){value{5}}
+            }
+
+
+
+    }
 }
