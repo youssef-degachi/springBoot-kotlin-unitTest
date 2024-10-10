@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 class MockBankDataSource: BankDataSource {
 
 
-    val banks = listOf(
+    val banks = mutableListOf(
         Bank("abcdef",0.1,1),
         Bank("1234",1.2,5),
         Bank("5678",0.1,1)
@@ -21,8 +21,13 @@ class MockBankDataSource: BankDataSource {
         banks.firstOrNull() {it.accountNumber == accountNumber}
             ?: throw NoSuchElementException("Could not find a bank with account number $accountNumber")
 
-
-
+    override fun createBank(bank: Bank): Bank {
+        if (banks.any {it.accountNumber == bank.accountNumber}){
+            throw  IllegalArgumentException("Bank with account number ${bank.accountNumber} already exists.")
+        }
+        banks.add(bank)
+        return bank
+    }
 }
 
 
