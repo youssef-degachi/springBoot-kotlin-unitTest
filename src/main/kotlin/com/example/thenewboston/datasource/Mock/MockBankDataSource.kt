@@ -13,9 +13,17 @@ class MockBankDataSource: BankDataSource {
         Bank("abcdef",0.1,1),
         Bank("1234",1.2,5),
         Bank("5678",0.1,1)
-
     )
     override fun retrieveBanks(): Collection<Bank> = banks
 
 
+    override fun retrieveBanks(accountNumber: String): Bank =
+        banks.first {it.accountNumber = accountNumber}
+
 }
+
+
+}
+
+
+
