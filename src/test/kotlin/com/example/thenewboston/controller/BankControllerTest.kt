@@ -172,7 +172,7 @@ class BankControllerTest @Autowired constructor(
             // then
             performPatchRequest
                 .andDo { print() }
-                .andExpect { status { isBadRequest() } }
+                .andExpect { status { isNotFound() } }
         } //end test
 
     } // end nested

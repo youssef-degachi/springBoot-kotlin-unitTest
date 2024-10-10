@@ -24,13 +24,13 @@ class BankController (private val service: BankService){
     fun handleBadRequest(e: IllegalArgumentException): ResponseEntity<String> =
         ResponseEntity(e.message,HttpStatus.BAD_REQUEST)
 
-    @GetMapping()
+    @GetMapping
     fun getBanks():Collection<Bank> = service.getBanks()
 
     @GetMapping("/{accountNumber}")
     fun getBank(@PathVariable accountNumber: String) = service.getBank(accountNumber)
 
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addBank(@RequestBody bank: Bank): Bank = service.addBank(bank)
 
