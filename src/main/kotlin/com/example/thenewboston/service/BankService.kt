@@ -16,5 +16,5 @@ class BankService (private val dataSource: BankDataSource){
 
     fun updateBank(bank: Bank): Bank = dataSource.updateBank(bank)
     //fun getBank(accountNumber: String): Bank = dataSource.retrieveBanks(accountNumber )
-
+    fun deleteBank(accountNumber: String): Unit = dataSource.deleteBank(accountNumber)
 }
