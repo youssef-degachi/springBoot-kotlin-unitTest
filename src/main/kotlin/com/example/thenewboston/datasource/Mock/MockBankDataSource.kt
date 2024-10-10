@@ -17,10 +17,17 @@ class MockBankDataSource: BankDataSource {
     override fun retrieveBanks(): Collection<Bank> = banks
 
 
+<<<<<<< HEAD
     override fun retrieveBank(accountNumber: String): Bank =
         banks.first {it.accountNumber == accountNumber}
 
 
+=======
+    override fun retrieveBanks(accountNumber: String): Bank =
+        banks.first {it.accountNumber = accountNumber}
+
+}
+>>>>>>> e157923 (create nested test class , but in MockBankDataSource  the retrieveBanks(account) not work)
 
 
 }
