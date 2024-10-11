@@ -1,7 +1,14 @@
 package com.example.thenewboston.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class Bank(
-    var accountNumber: String,
+    @JsonProperty("account_number")
+    val accountNumber: String,
+
+    @JsonProperty("trust")
     val trust: Double,
-    val transactionFee: Int,
+
+    @JsonProperty("default_transaction_fee")
+    val transactionFee: Int
 )

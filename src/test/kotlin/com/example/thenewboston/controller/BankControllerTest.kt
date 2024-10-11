@@ -36,9 +36,9 @@ class BankControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$[0].accountNumber") { value("abcdef") } // Check the first entry
-                    jsonPath("$[1].accountNumber") { value("1234") }  // Check the second entry
-                    jsonPath("$[2].accountNumber") { value("5678") }  // Check the third entry
+                    jsonPath("$[0].account_number") { value("abcdef") } // Check the first entry
+                    jsonPath("$[1].account_number") { value("1234") }  // Check the second entry
+                    jsonPath("$[2].account_number") { value("5678") }  // Check the third entry
                 }
         }
     }
@@ -60,7 +60,7 @@ class BankControllerTest @Autowired constructor(
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
                     jsonPath("$.trust") { value(1.2) } // Use value directly
-                    jsonPath("$.transactionFee") { value(5) } // Use value directly
+                    jsonPath("$.default_transaction_fee") { value(5) } // Use value directly
                 }
         }
 

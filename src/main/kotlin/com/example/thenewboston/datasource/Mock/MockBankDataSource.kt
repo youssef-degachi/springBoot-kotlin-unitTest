@@ -5,7 +5,7 @@ import com.example.thenewboston.model.Bank
 import org.springframework.stereotype.Repository
 
 
-@Repository
+@Repository("mock")
 class MockBankDataSource: BankDataSource {
 
 
