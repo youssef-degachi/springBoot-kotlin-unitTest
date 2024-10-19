@@ -38,4 +38,8 @@ class NetworkDataSource(
     override fun deleteBank(accountNumber: String) {
         TODO("Not yet implemented")
     }
+
+    override fun withDraw(accountNumber: String,transactionFee: Number): Bank {
+        TODO("Not yet implemented")
+    }
 }

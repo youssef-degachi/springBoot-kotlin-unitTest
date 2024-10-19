@@ -1,3 +1,5 @@
+//1
+
 package com.example.thenewboston.service
 
 import com.example.thenewboston.datasource.BankDataSource
@@ -18,4 +20,9 @@ class BankService (@Qualifier("mock") private val dataSource: BankDataSource){
     fun updateBank(bank: Bank): Bank = dataSource.updateBank(bank)
     //fun getBank(accountNumber: String): Bank = dataSource.retrieveBanks(accountNumber )
     fun deleteBank(accountNumber: String): Unit = dataSource.deleteBank(accountNumber)
+
+    // user service
+
+    fun withDraw(accountNumber: String, transactionFee: Number): Bank = dataSource.withDraw(accountNumber, transactionFee)
+
 }

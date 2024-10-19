@@ -1,3 +1,4 @@
+//3
 package com.example.thenewboston.controller
 
 import com.example.thenewboston.model.Bank
@@ -43,5 +44,8 @@ class BankController (private val service: BankService){
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteBank(@PathVariable accountNumber: String): Unit = service.deleteBank(accountNumber)
 
+
+    @PutMapping("/{accountNumber},{transactionFee}")
+    fun withDraw(@PathVariable accountNumber: String, @PathVariable transactionFee: Int): Bank = service.withDraw(accountNumber,transactionFee)
 
 }

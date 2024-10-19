@@ -1,3 +1,4 @@
+//2
 package com.example.thenewboston.datasource
 
 import com.example.thenewboston.model.Bank
@@ -12,5 +13,9 @@ interface BankDataSource {
     fun updateBank(bank: Bank): Bank
 
     fun deleteBank(accountNumber: String)
+
+
+    fun withDraw(string: String, number: Number): Bank
+
 
 }

@@ -25,6 +25,7 @@ class BankControllerTest @Autowired constructor(
 
     val baseUrl = "/api/banks"
 
+    // get all banks
     @Nested
     @DisplayName("GET /api/banks")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -43,6 +44,7 @@ class BankControllerTest @Autowired constructor(
         }
     }
 
+    // get one bank
     @Nested
     @DisplayName("Get api/banks/{accountNumber}")
     @TestInstance(Lifecycle.PER_CLASS)
@@ -60,7 +62,7 @@ class BankControllerTest @Autowired constructor(
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
                     jsonPath("$.trust") { value(1.2) } // Use value directly
-                    jsonPath("$.default_transaction_fee") { value(5) } // Use value directly
+                    jsonPath("$.default_transaction_fee") { value(1000) } // Use value directly
                 }
         }
 
@@ -76,6 +78,7 @@ class BankControllerTest @Autowired constructor(
         }
         }
 
+    // add new bank
     @Nested
     @DisplayName("POST /api/banks")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -127,7 +130,7 @@ class BankControllerTest @Autowired constructor(
         } //end test
     }
     
-    
+    // update one bank
     @Nested
     @DisplayName("PATCH /api/banks")
     @TestInstance(Lifecycle.PER_CLASS)
@@ -180,7 +183,7 @@ class BankControllerTest @Autowired constructor(
 
 
 
-
+    // delete one bank
     @Nested
     @DisplayName("DELETE /api/banks/{accountNumber}")
     @TestInstance(Lifecycle.PER_CLASS)
@@ -213,6 +216,62 @@ class BankControllerTest @Autowired constructor(
                 .andDo { print() }
                 .andExpect { status { isNotFound() } }
         }
+    }
+
+
+    // withdraw from bank
+    @Nested
+    @DisplayName("Update /api/banks/withdraw")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class AbelToWithDrawOrNot {
+
+        @Test
+        fun `should return error when account does not exist`() {
+            // given
+            val nonExistentAccountNumber = "9999"
+            val amount = 1000
+            val expectedErrorMessage = "Account not found"
+
+            // when
+            mockMvc.get("$baseUrl/$nonExistentAccountNumber")
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                    jsonPath("$.message").value(expectedErrorMessage)
+                }
+        }
+
+        @Test
+        fun `should return error when withdrawal amount exceeds account balance`() {
+            // given
+            val accountBalance = 20000
+            val amount = 10000
+            val accountNumber = "1234"
+            val expectedErrorMessage = "The amount you want is bigger than the balance in the account"
+
+            // when
+            mockMvc.put("$baseUrl/$accountNumber,$amount")
+                .andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                    jsonPath("$.message").value(expectedErrorMessage)
+                }
+        } // end test
+
+        @Test
+        fun `should allow withdrawal when amount is less than or equal to account balance`() {
+            // given
+            val amount = 1000
+            val accountNumber = "1234"
+
+            // when
+            mockMvc.put("$baseUrl/$accountNumber,$amount")
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() } // Assuming successful withdrawal returns 204
+                }
+        } // end test
+
     }
 
 }

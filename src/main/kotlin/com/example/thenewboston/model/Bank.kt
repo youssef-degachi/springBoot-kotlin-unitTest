@@ -10,5 +10,5 @@ data class Bank(
     val trust: Double,
 
     @JsonProperty("default_transaction_fee")
-    val transactionFee: Int
+    var transactionFee: Int
 )
