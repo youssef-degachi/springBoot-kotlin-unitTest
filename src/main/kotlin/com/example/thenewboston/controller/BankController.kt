@@ -48,4 +48,7 @@ class BankController (private val service: BankService){
     @PutMapping("/{accountNumber},{transactionFee}")
     fun withDraw(@PathVariable accountNumber: String, @PathVariable transactionFee: Int): Bank = service.withDraw(accountNumber,transactionFee)
 
+    @PutMapping("/{fromAccount}/{toAccount}/{amount}")
+    fun transfer(@PathVariable fromAccount: String, @PathVariable toAccount: String, @PathVariable amount: Int): Bank = service.transfer(fromAccount,toAccount,amount)
+
 }

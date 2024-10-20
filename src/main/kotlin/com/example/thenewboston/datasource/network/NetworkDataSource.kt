@@ -42,4 +42,12 @@ class NetworkDataSource(
     override fun withDraw(accountNumber: String,transactionFee: Number): Bank {
         TODO("Not yet implemented")
     }
+
+    override fun transfer(
+        fromAccount: String,
+        toAccount: String,
+        amount: Number,
+    ): Bank {
+        TODO("Not yet implemented")
+    }
 }

@@ -23,6 +23,9 @@ class BankService (@Qualifier("mock") private val dataSource: BankDataSource){
 
     // user service
 
+    //fun deposit(accountNumber: String, transactionFee: Number): Bank = dataSource.deposit(accountNumber, transactionFee)
+
     fun withDraw(accountNumber: String, transactionFee: Number): Bank = dataSource.withDraw(accountNumber, transactionFee)
 
+    fun transfer(accountNumber: String, toAccountNumber: String ,transactionFee: Number): Bank = dataSource.transfer(accountNumber, toAccountNumber,transactionFee)
 }

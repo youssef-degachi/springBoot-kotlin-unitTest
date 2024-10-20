@@ -70,6 +70,30 @@ class MockBankDataSource: BankDataSource {
 
         return currentBank
     }
+
+    override fun transfer(fromAccount: String, toAccount: String, amount: Number,): Bank {
+        val accountBalance = 20000;
+        val currentBank = banks.firstOrNull() {it.accountNumber == fromAccount}
+            ?: throw NoSuchElementException("Could not find bank with account number $fromAccount")
+
+        val nextBank = banks.firstOrNull() {it.accountNumber == toAccount}
+            ?: throw NoSuchElementException("We can't find bank with account number $toAccount")
+
+
+        if(amount.toDouble() > currentBank.transactionFee){
+            throw IllegalArgumentException("the amount you will transfer is bigger than what you have")
+        }
+
+        if(amount.toDouble() > accountBalance){
+            throw IllegalArgumentException("The amount you will transfer is bigger than the balance in the account the max transfer is $accountBalance")
+        }
+
+        nextBank.transactionFee += amount.toInt()
+        currentBank.transactionFee -= amount.toInt()
+        println("transfer successful. Amount transfer: $amount")
+        return currentBank
+
+    }
 }
 
 

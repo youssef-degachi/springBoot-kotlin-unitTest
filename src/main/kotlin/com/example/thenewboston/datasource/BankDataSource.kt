@@ -14,8 +14,9 @@ interface BankDataSource {
 
     fun deleteBank(accountNumber: String)
 
+    fun withDraw(accountNumber: String, amount: Number): Bank
 
-    fun withDraw(string: String, number: Number): Bank
-
+    fun transfer(fromAccount: String, toAccount: String, amount: Number): Bank
+    //fun transfer(string: String, number: Number): Bank
 
 }

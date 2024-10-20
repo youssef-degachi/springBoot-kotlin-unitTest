@@ -274,4 +274,47 @@ class BankControllerTest @Autowired constructor(
 
     }
 
+
+    // transferee amount  of money
+    @Nested
+    @DisplayName("Put /api/banks/transfer")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class TransferAmountToOtherBank {
+     @Test
+     fun `should return error when there one account not exist `() {
+         // given
+         val fromAccount = "1234";
+         val toAccount = "9999";
+         val amount = 1000;
+         val expectedErrorMessage = "Account not found";
+         // when/then
+         mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount")
+             .andDo { print() }
+             .andExpect {
+                 status{ isNotFound() }
+                 jsonPath("$.message").value(expectedErrorMessage)
+             }
+     } // end test
+
+
+      @Test
+      fun `should return error when account transectionFee is not enough`() {
+          // given
+          val fromAccount = "abcdef";
+          val toAccount = "1234";
+          val amount = 1000000000
+          // when
+          mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount"){
+              contentType = MediaType.APPLICATION_JSON
+          }
+              .andDo { print() }
+              .andExpect {
+                  status { isBadRequest() }
+          }
+          // then
+
+      } // end test
+    } // end nested
+
+
 }
