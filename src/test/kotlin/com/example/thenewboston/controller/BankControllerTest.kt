@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 class BankControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     var objectMapper: ObjectMapper
-){
+) {
 
     val baseUrl = "/api/banks"
 
@@ -74,23 +74,23 @@ class BankControllerTest @Autowired constructor(
             // when// then
             mockMvc.get("$baseUrl/$accountNumber")
                 .andDo { print() }
-                .andExpect { status{isNotFound()} }
+                .andExpect { status { isNotFound() } }
         }
-        }
+    }
 
     // add new bank
     @Nested
     @DisplayName("POST /api/banks")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    inner class  PostNewBank{
+    inner class PostNewBank {
 
         @Test
         fun `should add the new bank`() {
-           // given
+            // given
             val newBank = Bank("acc123", 31.415, 2)
 
             // when
-            val performPost = mockMvc.post(baseUrl){
+            val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(newBank)
             }
@@ -100,7 +100,7 @@ class BankControllerTest @Autowired constructor(
                 .andDo { print() }
                 .andExpect {
                     status { isCreated() }
-                    content{
+                    content {
                         contentType(MediaType.APPLICATION_JSON)
                         json(objectMapper.writeValueAsString(newBank))
                     }
@@ -113,11 +113,11 @@ class BankControllerTest @Autowired constructor(
         @Test
         fun `should retrun BAD REQUEST if bank wiht given account number already exists`() {
             /* TEXT */
-            
+
             // given
-            val invalidBank = Bank("1234",1.2,5)
+            val invalidBank = Bank("1234", 1.2, 5)
             // when 
-            val performPost = mockMvc.post(baseUrl){
+            val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(invalidBank)
             }
@@ -129,20 +129,20 @@ class BankControllerTest @Autowired constructor(
 
         } //end test
     }
-    
+
     // update one bank
     @Nested
     @DisplayName("PATCH /api/banks")
     @TestInstance(Lifecycle.PER_CLASS)
-    inner class PatchExistingBank  {
+    inner class PatchExistingBank {
         @Test
         fun `should update an existing bank`() {
 
             // given
-            val updatedBank = Bank("1234",1.2,5)
+            val updatedBank = Bank("1234", 1.2, 5)
 
             // when
-            val performPatchRequest = mockMvc.patch(baseUrl){
+            val performPatchRequest = mockMvc.patch(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(updatedBank)
             }
@@ -159,17 +159,17 @@ class BankControllerTest @Autowired constructor(
                 }
 
             mockMvc.get("$baseUrl/${updatedBank.accountNumber}")
-                .andExpect { content{json(objectMapper.writeValueAsString(updatedBank))} }
+                .andExpect { content { json(objectMapper.writeValueAsString(updatedBank)) } }
         } //end test
 
         @Test
         fun `should return BAD REQUEST if no bank with given account number exists`() {
             /* TEXT */
-            
+
             // given
             val invalidBank = Bank("does_not_exist", 1.0, 1)
             // when 
-            val performPatchRequest = mockMvc.patch(baseUrl){
+            val performPatchRequest = mockMvc.patch(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(invalidBank)
             }
@@ -180,7 +180,6 @@ class BankControllerTest @Autowired constructor(
         } //end test
 
     } // end nested
-
 
 
     // delete one bank
@@ -247,7 +246,8 @@ class BankControllerTest @Autowired constructor(
             val accountBalance = 20000
             val amount = 10000
             val accountNumber = "1234"
-            val expectedErrorMessage = "The amount you want is bigger than the balance in the account"
+            val expectedErrorMessage =
+                "The amount you want is bigger than the balance in the account"
 
             // when
             mockMvc.put("$baseUrl/$accountNumber,$amount")
@@ -280,41 +280,64 @@ class BankControllerTest @Autowired constructor(
     @DisplayName("Put /api/banks/transfer")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class TransferAmountToOtherBank {
-     @Test
-     fun `should return error when there one account not exist `() {
-         // given
-         val fromAccount = "1234";
-         val toAccount = "9999";
-         val amount = 1000;
-         val expectedErrorMessage = "Account not found";
-         // when/then
-         mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount")
-             .andDo { print() }
-             .andExpect {
-                 status{ isNotFound() }
-                 jsonPath("$.message").value(expectedErrorMessage)
-             }
-     } // end test
+        @Test
+        fun `should return error when there one account not exist `() {
+            // given
+            val fromAccount = "1234";
+            val toAccount = "9999";
+            val amount = 1000;
+            val expectedErrorMessage = "Account not found";
+            // when/then
+            mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount")
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                    jsonPath("$.message").value(expectedErrorMessage)
+                }
+        } // end test
 
 
-      @Test
-      fun `should return error when account transectionFee is not enough`() {
-          // given
-          val fromAccount = "abcdef";
-          val toAccount = "1234";
-          val amount = 1000000000
-          // when
-          mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount"){
-              contentType = MediaType.APPLICATION_JSON
-          }
-              .andDo { print() }
-              .andExpect {
-                  status { isBadRequest() }
-          }
-          // then
+        @Test
+        fun `should return error when account transectionFee is not enough`() {
+            // given
+            val fromAccount = "abcdef";
+            val toAccount = "1234";
+            val amount = 1000000000
+            // when
+            mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount") {
+                contentType = MediaType.APPLICATION_JSON
+            }
+                .andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                }
+            // then
 
-      } // end test
+        } // end test
+
+
+        @Test
+        fun `should return that function work without any issus`() {
+            // given
+            val fromAccount = "abcdef";
+            val toAccount = "1234";
+            val amount = 1000
+            // when
+            mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount") {
+                contentType = MediaType.APPLICATION_JSON
+            }
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                }
+            // then
+
+        } // end test
+
+
+        
     } // end nested
+
 
 
 }
