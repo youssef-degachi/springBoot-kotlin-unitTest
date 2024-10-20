@@ -15,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
+import kotlin.test.assertEquals
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -335,7 +336,38 @@ class BankControllerTest @Autowired constructor(
         } // end test
 
 
-        
+        @Test
+        fun `should return correct default transaction fees for accounts`() {
+            // given
+            val fromAccount = "1234";
+            val toAccount = "abcdef";
+            val amount = 1000
+            mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount")
+            // when
+            val response1 = mockMvc.get("$baseUrl/$fromAccount")
+                .andExpect {
+                    status { isOk() }
+                }
+                .andReturn()
+                .response
+                .contentAsString
+
+            val response2 = mockMvc.get("$baseUrl/$toAccount")
+                .andExpect {
+                    status { isOk() }
+                }
+                .andReturn()
+                .response
+                .contentAsString
+
+            // then
+            val jsonResponse1 = ObjectMapper().readTree(response1)
+            val jsonResponse2 = ObjectMapper().readTree(response2)
+
+            assertEquals(8000, jsonResponse1.get("default_transaction_fee").asInt())
+            assertEquals(6000, jsonResponse2.get("default_transaction_fee").asInt())
+        }
+
     } // end nested
 
 
