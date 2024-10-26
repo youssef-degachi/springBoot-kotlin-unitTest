@@ -201,7 +201,6 @@ class BankControllerTest @Autowired constructor(
                 .andExpect {
                     status { isNoContent() }
                 }
-
             mockMvc.get("$baseUrl/$accountNumber")
                 .andExpect { status { isNotFound() } }
         }
