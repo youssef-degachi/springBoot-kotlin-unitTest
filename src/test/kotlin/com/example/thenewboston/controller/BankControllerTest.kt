@@ -63,7 +63,7 @@ class BankControllerTest @Autowired constructor(
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
                     jsonPath("$.trust") { value(1.2) } // Use value directly
-                    jsonPath("$.default_transaction_fee") { value(1000) } // Use value directly
+                    jsonPath("$.default_transaction_fee") { value(9000) } // Use value directly
                 }
         }
 
@@ -224,6 +224,25 @@ class BankControllerTest @Autowired constructor(
     @TestInstance(Lifecycle.PER_CLASS)
     inner class AbelToWithDrawOrNot {
 
+
+        @Test
+        fun `should return bad request when amount he put is negative `() {
+            // given
+            val accountBalance = 20000
+            val amount = -1000
+            val accountNumber = "1234"
+            val expectedErrorMessage =
+                "The amount can't be negative"
+
+            // when
+            mockMvc.put("$baseUrl/$accountNumber,$amount")
+                .andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                    jsonPath("$.message").value(expectedErrorMessage)
+                }
+        } // end test
+
         @Test
         fun `should return error when account does not exist`() {
             // given
@@ -277,9 +296,26 @@ class BankControllerTest @Autowired constructor(
 
     // transferee amount  of money
     @Nested
-    @DisplayName("Put /api/banks/transfer")
+    @DisplayName("Put /api/banks/fromAccount/toAccount/amount")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class TransferAmountToOtherBank {
+
+        @Test
+        fun `should return error when try transfer negative amount `() {
+            // given
+            val fromAccount = "1234";
+            val toAccount = "5678";
+            val amount = -1000;
+            val expectedErrorMessage = "amount can't be negative";
+            // when/then
+            mockMvc.put("$baseUrl/$fromAccount/$toAccount/$amount")
+                .andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                    jsonPath("$.message").value(expectedErrorMessage)
+                }
+        } // end test
+
         @Test
         fun `should return error when there one account not exist `() {
             // given

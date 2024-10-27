@@ -65,6 +65,9 @@ class MockBankDataSource: BankDataSource {
         if (currentBank.transactionFee < transactionFee.toDouble()){
             throw IllegalArgumentException("The amount you want is bigger than the what you have")
         }
+        if(transactionFee.toDouble() < 0){
+            throw IllegalArgumentException("the amount can't be negative")
+        }
         currentBank.transactionFee -= transactionFee.toInt()
         println("Withdrawal successful. Amount withdrawn: $transactionFee")
 
@@ -82,6 +85,10 @@ class MockBankDataSource: BankDataSource {
 
         if(amount.toDouble() > currentBank.transactionFee){
             throw IllegalArgumentException("the amount you will transfer is bigger than what you have")
+        }
+
+        if(amount.toDouble() < 0){
+            throw IllegalArgumentException("the amount can't be negative")
         }
 
         if(amount.toDouble() > accountBalance){
